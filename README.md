@@ -1,5 +1,5 @@
 # Back-End
-TasQueue - 백엔드 레포지토리입니다.
+플러그잇슈 - 백엔드 레포지토리입니다.
 
 ## Git
 ### Branch Flow
