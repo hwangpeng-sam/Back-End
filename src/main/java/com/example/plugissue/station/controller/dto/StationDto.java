@@ -6,8 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class SimpleStationDto {
-
+public class StationDto {
     private Long id;
 
     private Long sId;
@@ -18,11 +17,15 @@ public class SimpleStationDto {
 
     private String name;
 
-    public SimpleStationDto(Station station){
+    private String address;
+
+
+    public StationDto (Station station){
         this.id = station.getId();
         this.sId = station.getSId();
         this.lng = station.getLongitude();
         this.lat = station.getLatitude();
         this.name = station.getName();
+        this.address = station.getAddress();
     }
 }

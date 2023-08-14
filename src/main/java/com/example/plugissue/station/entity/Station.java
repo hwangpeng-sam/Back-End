@@ -19,7 +19,7 @@ public class Station {
     private Long id;
 
     @Column(nullable = false)
-    private String sId;
+    private Long sId;
 
     @Column(nullable = false)
     private Double longitude;
