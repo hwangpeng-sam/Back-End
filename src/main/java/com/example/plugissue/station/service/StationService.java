@@ -20,4 +20,8 @@ public class StationService {
     public List<Station> findByLoc(Double lat,Double lng, Integer range){
         return stationRepository.findStationsByLoc(lat,lng,range);
     }
+
+    public Station findById(Long stationId) {
+        return stationRepository.findById(stationId).orElseThrow();
+    }
 }
