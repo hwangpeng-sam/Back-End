@@ -15,10 +15,11 @@ public class Station {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "station_id")
+    @Column(name = "id")
     private Long id;
 
-    @Column(nullable = false)
+    @Id
+    @Column(name = "station_id", nullable = false)
     private Long sId;
 
     @Column(nullable = false)
