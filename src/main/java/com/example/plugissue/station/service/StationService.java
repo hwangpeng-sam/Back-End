@@ -1,6 +1,5 @@
 package com.example.plugissue.station.service;
 
-import com.example.plugissue.station.controller.dto.EntityToDtoMapper;
 import com.example.plugissue.station.controller.dto.StationStatusDto;
 import com.example.plugissue.station.entity.Station;
 import com.example.plugissue.station.repository.StationRepository;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -25,9 +22,7 @@ public class StationService {
     private final StationRepository stationRepository;
     private final StatusRepository statusRepository;
 
-    public List<StationStatusDto> findStationsStatusByLoc(
-            Double lat, Double lng, Integer range
-    ) {
+    public List<StationStatusDto> findStationsStatusByLoc(Double lat, Double lng, Integer range) {
         List<Object[]> queryResult = stationRepository.findStationsByLoc(lat, lng, range);
         List<StationStatusDto> dtos = new ArrayList<>();
 
@@ -39,7 +34,15 @@ public class StationService {
         return dtos;
     }
 
-    public Station findById(Long stationId) {
-        return stationRepository.findById(stationId).orElseThrow();
+    public StationStatusDto findById(Long stationId) {
+        Object[] queryResult = stationRepository.findStationById(stationId);
+
+        Station station = (Station) queryResult[0];
+        Status status = (Status) queryResult[1];
+
+        StationStatusDto stationStatusDto = new StationStatusDto(station,status);
+
+        return stationStatusDto;
+//        return stationRepository.findById(stationId).orElseThrow();
     }
 }
