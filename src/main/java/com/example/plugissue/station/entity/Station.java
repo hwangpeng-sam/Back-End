@@ -14,11 +14,6 @@ import javax.persistence.*;
 public class Station {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
-    @Id
     @Column(name = "station_id", nullable = false)
     private Long sId;
 
