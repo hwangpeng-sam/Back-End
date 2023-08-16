@@ -20,7 +20,6 @@ import java.util.List;
 public class StationService {
 
     private final StationRepository stationRepository;
-    private final StatusRepository statusRepository;
 
     public List<StationStatusDto> findStationsStatusByLoc(Double lat, Double lng, Integer range) {
         List<Object[]> queryResult = stationRepository.findStationsByLoc(lat, lng, range);
