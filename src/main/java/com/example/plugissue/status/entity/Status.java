@@ -15,8 +15,8 @@ public class Status {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @Column(name = "status_id", nullable = false)
+    private Long sId;
 
     @Column
     private Integer occupancy_20;
@@ -36,7 +36,7 @@ public class Status {
     @Column
     private Integer occupancy_120;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "station_id", nullable = false)
-    private Station station;
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "station_id", nullable = false)
+//    private Station station;
 }
