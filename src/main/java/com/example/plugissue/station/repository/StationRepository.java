@@ -10,17 +10,19 @@ import java.util.List;
 
 public interface StationRepository extends JpaRepository<Station,Long> {
 
-    @Query("SELECT s, st FROM Station s " +
-            "LEFT JOIN Status st ON s.sId = st.station.sId " +
+    @Query("SELECT s, oc FROM Station s " +
+            "LEFT JOIN occupancy " +
+            "oc ON s.sId = oc.station.sId " +
             "WHERE 6371 * acos(" +
             "cos(radians(:lat)) * cos(radians(s.latitude)) * " +
             "cos(radians(s.longitude) - radians(:lng)) + " +
             "sin(radians(:lat)) * sin(radians(s.latitude))" +
             ") <= :range")
-    List<Object[]> findStationsByLoc(@Param("lat") Double lat, @Param("lng") Double lng, @Param("range") Integer range);
+    List<Object[]> findStationsByLoc(@Param("lat") Double lat, @Param("lng") Double lng, @Param("range") Double range);
 
-    @Query("SELECT s, st FROM Station s, Status st " +
-            "WHERE s.sId = st.station.sId AND s.sId = :sId")
+    @Query("SELECT s,oc FROM Station s " +
+            "LEFT JOIN occupancy oc ON s.sId = oc.id " +
+            "WHERE s.sId = :sId")
     Object[] findStationById(@PathVariable("stationId") Long sId);
 
 }
