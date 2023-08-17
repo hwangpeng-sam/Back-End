@@ -1,5 +1,6 @@
 package com.example.plugissue.station.repository;
 
+import com.example.plugissue.station.controller.dto.StationStatusDto;
 import com.example.plugissue.station.entity.Station;
 import com.example.plugissue.station.service.StationService;
 import com.example.plugissue.status.entity.Status;
@@ -21,18 +22,15 @@ public class stationRepositoryTest {
     StationRepository stationRepository;
     @Autowired
     StatusRepository statusRepository;
-
+    StationService stationService;
     @Test
     void getStationList(){
         //given
-        Station station = new Station(1L, 127.33434214, 38.954859, "보라매사옥","보라매어쩌구");
-        stationRepository.save(station);
-        Status status = new Status(1L,1,1,1,1,1,1,station);
-        statusRepository.save(status);
         //when
-        List<Object[]> res = stationRepository.findStationsByLoc(38.954859, 127.33434214,1.0);
+//        List<Object[]> res = stationRepository.findStationsByLoc(128.905083, 37.744127,1.0);
+        List<StationStatusDto> dtos = stationService.findStationsStatusByLoc(128.905083, 37.744127,100.0);
         //then
-        System.out.println(res.get(0));
+        System.out.println(dtos.get(0));
     }
 
     @Test

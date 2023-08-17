@@ -34,14 +34,15 @@ public class StationService {
     }
 
     public StationStatusDto findById(Long stationId) {
-        Object[] queryResult = stationRepository.findStationById(stationId);
+        StationStatusDto dto = stationRepository.findStationById(stationId);
 
-        Station station = (Station) queryResult[0];
-        Status status = (Status) queryResult[1];
-
-        StationStatusDto stationStatusDto = new StationStatusDto(station,status);
-
-        return stationStatusDto;
+        return dto;
+//        Station station = (Station) queryResult[0];
+//        Status status = (Status) queryResult[1];
+//
+//        StationStatusDto stationStatusDto = new StationStatusDto(station,status);
+//
+//        return stationStatusDto;
 //        return stationRepository.findById(stationId).orElseThrow();
     }
 }

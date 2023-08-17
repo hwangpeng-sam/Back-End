@@ -28,11 +28,10 @@ public class StationController {
 
     @ResponseBody
     @GetMapping("/station/{sId}")
-    public ResponseEntity<StationStatusDto> getStationDetails(
+    public ResponseEntity<StationStatusDto>getStationDetails(
             @PathVariable("sId") Long stationId
     ){
         StationStatusDto stationStatusDto = stationService.findById(stationId);
         return ResponseEntity.ok(stationStatusDto);
     }
-
 }

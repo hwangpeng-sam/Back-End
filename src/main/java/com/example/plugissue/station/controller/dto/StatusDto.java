@@ -25,7 +25,7 @@ public class StatusDto {
     private Integer occupancy_120;
 
     public StatusDto(Status status){
-        this.id = status.getStation().getSId();
+        this.id = status.getId();
         this.occupancy_20 = status.getOccupancy_20();
         this.occupancy_40 = status.getOccupancy_40();
         this.occupancy_60 = status.getOccupancy_60();

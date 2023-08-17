@@ -34,9 +34,6 @@ public class Status {
     @Column
     private Integer Occupancy_120;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "station_id", nullable = false)
-    private Station station;
 
 //    @Builder
 //    public Status(Integer occupancy_20,Integer occupancy_40,Integer occupancy_60, Integer occupancy_80, Integer occupancy_100, Integer occupancy_120,Station station){

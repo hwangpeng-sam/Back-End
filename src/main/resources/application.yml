@@ -2,7 +2,7 @@ spring:
   # DB 연결
   datasource:
     # 설치된 H2 DB와 연결 URL
-    url: jdbc:mysql://db-hwangpeng.c753snssvybo.ap-northeast-2.rds.amazonaws.com/evs
+    url: jdbc:mysql://db-hwangpeng.c753snssvybo.ap-northeast-2.rds.amazonaws.com:3306/evs
     # 접속을 위한 드라이버
     driver-class-name: com.mysql.cj.jdbc.Driver
     # springboot 2.4 부터는 username이 꼭 있어야합니다. 없으면 에러가 발생합니다.
