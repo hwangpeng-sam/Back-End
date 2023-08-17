@@ -27,7 +27,7 @@ public class stationRepositoryTest {
         //given
         Station station = new Station(1L, 127.33434214, 38.954859, "보라매사옥","보라매어쩌구");
         stationRepository.save(station);
-        Status status = new Status(1,1,1,1,1,1,station);
+        Status status = new Status(1L,1,1,1,1,1,1,station);
         statusRepository.save(status);
         //when
         List<Object[]> res = stationRepository.findStationsByLoc(38.954859, 127.33434214,1.0);

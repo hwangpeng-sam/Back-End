@@ -1,10 +1,7 @@
 package com.example.plugissue.station.controller;
 
-import com.example.plugissue.station.controller.dto.StationDto;
 import com.example.plugissue.station.controller.dto.StationStatusDto;
-import com.example.plugissue.station.entity.Station;
 import com.example.plugissue.station.service.StationService;
-import com.example.plugissue.status.entity.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
