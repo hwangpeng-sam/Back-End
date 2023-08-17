@@ -20,7 +20,7 @@
 //    @Test
 //    void getStationList(){
 //        //given
-//        Station station = new Station(1L, 127, 38, )
+//        Station station = new Station(1L, 127.33434214, 38.954859, "보라매사옥","보라매어쩌구");
 //        //when
 //
 //        //then
