@@ -1,5 +1,6 @@
 package com.example.plugissue.station.repository;
 
+import com.example.plugissue.station.controller.dto.StationStatusDto;
 import com.example.plugissue.station.entity.Station;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +13,7 @@ public interface StationRepository extends JpaRepository<Station,Long> {
 
     @Query("SELECT s, oc FROM Station s " +
             "LEFT JOIN occupancy " +
-            "oc ON s.sId = oc.station.sId " +
+            "oc ON s.sId = oc.id " +
             "WHERE 6371 * acos(" +
             "cos(radians(:lat)) * cos(radians(s.latitude)) * " +
             "cos(radians(s.longitude) - radians(:lng)) + " +
@@ -21,8 +22,9 @@ public interface StationRepository extends JpaRepository<Station,Long> {
     List<Object[]> findStationsByLoc(@Param("lat") Double lat, @Param("lng") Double lng, @Param("range") Double range);
 
     @Query("SELECT s,oc FROM Station s " +
-            "LEFT JOIN occupancy oc ON s.sId = oc.id " +
-            "WHERE s.sId = :sId")
-    Object[] findStationById(@PathVariable("stationId") Long sId);
+            "LEFT JOIN occupancy " +
+            "oc ON s.sId = oc.id " +
+            "WHERE s.sId = :stationId")
+    StationStatusDto findStationById(@Param("stationId") Long stationId);
 
 }
