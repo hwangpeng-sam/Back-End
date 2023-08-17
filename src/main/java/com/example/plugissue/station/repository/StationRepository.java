@@ -17,7 +17,7 @@ public interface StationRepository extends JpaRepository<Station,Long> {
             "cos(radians(s.longitude) - radians(:lng)) + " +
             "sin(radians(:lat)) * sin(radians(s.latitude))" +
             ") <= :range")
-    List<Object[]> findStationsByLoc(@Param("lat") Double lat, @Param("lng") Double lng, @Param("range") Integer range);
+    List<Object[]> findStationsByLoc(@Param("lat") Double lat, @Param("lng") Double lng, @Param("range") Double range);
 
     @Query("SELECT s, st FROM Station s, Status st " +
             "WHERE s.sId = st.station.sId AND s.sId = :sId")

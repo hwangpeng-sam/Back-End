@@ -23,7 +23,7 @@ public class StationController {
     public ResponseEntity<List<StationStatusDto>> getStationList(
             @RequestParam("lat")Double lat,
             @RequestParam("lng")Double lng,
-            @RequestParam("range") Integer range)
+            @RequestParam("range") Double range)
     {
         List<StationStatusDto> stationStatusDtoList= stationService.findStationsStatusByLoc(lat, lng, range);
         return ResponseEntity.ok(stationStatusDtoList);

@@ -21,7 +21,7 @@ public class StationDto {
 
 
     public StationDto (Station station){
-        this.id = station.getId();
+        this.id = station.getSId();
         this.sId = station.getSId();
         this.lng = station.getLongitude();
         this.lat = station.getLatitude();
