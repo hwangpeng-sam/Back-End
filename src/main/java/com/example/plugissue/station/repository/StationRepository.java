@@ -25,6 +25,5 @@ public interface StationRepository extends JpaRepository<Station,Long> {
             "LEFT JOIN occupancy " +
             "oc ON s.sId = oc.id " +
             "WHERE s.sId = :stationId")
-    StationStatusDto findStationById(@Param("stationId") Long stationId);
-
+    List<Object[]> findStationById(@Param("stationId") Long stationId);
 }

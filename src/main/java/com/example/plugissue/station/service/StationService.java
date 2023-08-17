@@ -33,10 +33,20 @@ public class StationService {
         return dtos;
     }
 
-    public StationStatusDto findById(Long stationId) {
-        StationStatusDto dto = stationRepository.findStationById(stationId);
+    public List<StationStatusDto> findById(Long stationId) {
+//        StationStatusDto dto = stationRepository.findStationById(stationId);
+//
+//        return dto;
+        List<Object[]> queryResult = stationRepository.findStationById(stationId);
 
-        return dto;
+        List<StationStatusDto> dtos = new ArrayList<>();
+
+        for (Object[] objects : queryResult) {
+            Station station = (Station) objects[0];
+            Status status = (Status) objects[1];
+            dtos.add(new StationStatusDto(station, status));
+        }
+        return dtos;
 //        Station station = (Station) queryResult[0];
 //        Status status = (Status) queryResult[1];
 //
@@ -44,5 +54,6 @@ public class StationService {
 //
 //        return stationStatusDto;
 //        return stationRepository.findById(stationId).orElseThrow();
+//    }
     }
 }
