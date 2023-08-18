@@ -1,10 +1,7 @@
 package com.example.plugissue.station.controller;
 
-import com.example.plugissue.station.controller.dto.StationDto;
 import com.example.plugissue.station.controller.dto.StationStatusDto;
-import com.example.plugissue.station.entity.Station;
 import com.example.plugissue.station.service.StationService;
-import com.example.plugissue.status.entity.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +20,7 @@ public class StationController {
     public ResponseEntity<List<StationStatusDto>> getStationList(
             @RequestParam("lat")Double lat,
             @RequestParam("lng")Double lng,
-            @RequestParam("range") Integer range)
+            @RequestParam("range") Double range)
     {
         List<StationStatusDto> stationStatusDtoList= stationService.findStationsStatusByLoc(lat, lng, range);
         return ResponseEntity.ok(stationStatusDtoList);
@@ -31,11 +28,20 @@ public class StationController {
 
     @ResponseBody
     @GetMapping("/station/{sId}")
-    public ResponseEntity<StationStatusDto> getStationDetails(
+    public ResponseEntity<List<StationStatusDto>>getStationDetails(
             @PathVariable("sId") Long stationId
     ){
-        StationStatusDto stationStatusDto = stationService.findById(stationId);
+        List<StationStatusDto> stationStatusDto = stationService.findById(stationId);
         return ResponseEntity.ok(stationStatusDto);
     }
 
+    @ResponseBody
+    @GetMapping("/nav/near")
+    public ResponseEntity<List<StationStatusDto>>getNearStations(
+            @RequestParam("lat") Double lat,
+            @RequestParam("lng") Double lng
+    ){
+        List<StationStatusDto> stationStatusDtoList = stationService.findNearStations(lat,lng);
+        return ResponseEntity.ok(stationStatusDtoList);
+    }
 }

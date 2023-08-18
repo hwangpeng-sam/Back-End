@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Station {
 
     @Id
-    @Column(name = "station_id", nullable = false)
+    @Column(name = "Sid",nullable = false)
     private Long sId;
 
     @Column(nullable = false)
@@ -23,7 +23,7 @@ public class Station {
     @Column(nullable = false)
     private Double latitude;
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "Sname", nullable = false, length = 100)
     private String name;
 
     @Column(nullable = false, length = 200)

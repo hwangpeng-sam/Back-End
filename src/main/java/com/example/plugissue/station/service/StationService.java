@@ -21,7 +21,7 @@ public class StationService {
 
     private final StationRepository stationRepository;
 
-    public List<StationStatusDto> findStationsStatusByLoc(Double lat, Double lng, Integer range) {
+    public List<StationStatusDto> findStationsStatusByLoc(Double lat, Double lng, Double range) {
         List<Object[]> queryResult = stationRepository.findStationsByLoc(lat, lng, range);
         List<StationStatusDto> dtos = new ArrayList<>();
 
@@ -33,15 +33,38 @@ public class StationService {
         return dtos;
     }
 
-    public StationStatusDto findById(Long stationId) {
-        Object[] queryResult = stationRepository.findStationById(stationId);
+    public List<StationStatusDto> findById(Long stationId) {
+//        StationStatusDto dto = stationRepository.findStationById(stationId);
+//
+//        return dto;
+        List<Object[]> queryResult = stationRepository.findStationById(stationId);
 
-        Station station = (Station) queryResult[0];
-        Status status = (Status) queryResult[1];
+        List<StationStatusDto> dtos = new ArrayList<>();
 
-        StationStatusDto stationStatusDto = new StationStatusDto(station,status);
-
-        return stationStatusDto;
+        for (Object[] objects : queryResult) {
+            Station station = (Station) objects[0];
+            Status status = (Status) objects[1];
+            dtos.add(new StationStatusDto(station, status));
+        }
+        return dtos;
+//        Station station = (Station) queryResult[0];
+//        Status status = (Status) queryResult[1];
+//
+//        StationStatusDto stationStatusDto = new StationStatusDto(station,status);
+//
+//        return stationStatusDto;
 //        return stationRepository.findById(stationId).orElseThrow();
+//    }
+    }
+    public List<StationStatusDto> findNearStations(Double lat, Double lng) {
+        List<Object[]> queryResult = stationRepository.findStationsNearby(lat, lng);
+        List<StationStatusDto> dtos = new ArrayList<>();
+
+        for (Object[] objects : queryResult) {
+            Station station = (Station) objects[0];
+            Status status = (Status) objects[1];
+            dtos.add(new StationStatusDto(station, status));
+        }
+        return dtos;
     }
 }
