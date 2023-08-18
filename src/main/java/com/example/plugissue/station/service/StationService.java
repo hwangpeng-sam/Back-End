@@ -21,16 +21,24 @@ public class StationService {
 
     private final StationRepository stationRepository;
 
+    /**
+     * 사용자의 현재 위치 기준으로 range 내에 있는 충전소 목록 조회
+     * @param lat
+     * @param lng
+     * @param range
+     * @return 충전소 목록 리스트
+     */
     public List<StationStatusDto> findStationsStatusByLoc(Double lat, Double lng, Double range) {
         List<Object[]> queryResult = stationRepository.findStationsByLoc(lat, lng, range);
-        List<StationStatusDto> dtos = new ArrayList<>();
+        List<StationStatusDto> stationStatusDtoList = new ArrayList<>();
 
         for (Object[] objects : queryResult) {
             Station station = (Station) objects[0];
             Status status = (Status) objects[1];
-            dtos.add(new StationStatusDto(station, status));
+            stationStatusDtoList.add(new StationStatusDto(station, status));
         }
-        return dtos;
+
+        return stationStatusDtoList;
     }
 
     public List<StationStatusDto> findById(Long stationId) {
