@@ -34,4 +34,14 @@ public class StationController {
         List<StationStatusDto> stationStatusDto = stationService.findById(stationId);
         return ResponseEntity.ok(stationStatusDto);
     }
+
+    @ResponseBody
+    @GetMapping("/nav/near")
+    public ResponseEntity<List<StationStatusDto>>getNearStations(
+            @RequestParam("lat") Double lat,
+            @RequestParam("lng") Double lng
+    ){
+        List<StationStatusDto> stationStatusDtoList = stationService.findNearStations(lat,lng);
+        return ResponseEntity.ok(stationStatusDtoList);
+    }
 }
