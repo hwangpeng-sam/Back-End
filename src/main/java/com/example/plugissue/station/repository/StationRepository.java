@@ -26,4 +26,15 @@ public interface StationRepository extends JpaRepository<Station,Long> {
             "oc ON s.sId = oc.id " +
             "WHERE s.sId = :stationId")
     List<Object[]> findStationById(@Param("stationId") Long stationId);
+
+
+    @Query("SELECT s, oc FROM Station s " +
+            "LEFT JOIN occupancy " +
+            "oc ON s.sId = oc.id " +
+            "WHERE 6371 * acos(" +
+            "cos(radians(:lat)) * cos(radians(s.latitude)) * " +
+            "cos(radians(s.longitude) - radians(:lng)) + " +
+            "sin(radians(:lat)) * sin(radians(s.latitude))" +
+            ") <= 2")
+    List<Object[]> findStationsNearby(@Param("lat") Double lat, @Param("lng") Double lng); // 범위 2km 로 고정
 }

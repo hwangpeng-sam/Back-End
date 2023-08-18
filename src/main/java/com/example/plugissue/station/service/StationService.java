@@ -56,4 +56,15 @@ public class StationService {
 //        return stationRepository.findById(stationId).orElseThrow();
 //    }
     }
+    public List<StationStatusDto> findNearStations(Double lat, Double lng) {
+        List<Object[]> queryResult = stationRepository.findStationsNearby(lat, lng);
+        List<StationStatusDto> dtos = new ArrayList<>();
+
+        for (Object[] objects : queryResult) {
+            Station station = (Station) objects[0];
+            Status status = (Status) objects[1];
+            dtos.add(new StationStatusDto(station, status));
+        }
+        return dtos;
+    }
 }
