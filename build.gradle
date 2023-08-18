@@ -32,12 +32,15 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.8.0'
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.8.0'
+<<<<<<< HEAD
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'mysql:mysql-connector-java'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.1.2'
 
 
+=======
+>>>>>>> 7314b0f49cb124c6d58e6981e69961625d875aa5
 }
 
 tasks.named('test') {
