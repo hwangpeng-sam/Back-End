@@ -1,6 +1,7 @@
 package com.example.plugissue.station.controller;
 
 import com.example.plugissue.exceptionhandler.ErrorResponse;
+import com.example.plugissue.station.controller.dto.FinalDto;
 import com.example.plugissue.station.controller.dto.StationStatusDistDto;
 import com.example.plugissue.station.controller.dto.StationStatusDto;
 import com.example.plugissue.station.service.StationService;
@@ -29,13 +30,13 @@ public class StationController {
             @ApiResponse(code = 400, message = "BAD REQUEST", response = ErrorResponse.class),
             @ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
     })
-    public ResponseEntity<List<StationStatusDto>> getStationList(
+    public ResponseEntity<FinalDto> getStationList(
             @RequestParam("lat")Double lat,
             @RequestParam("lng")Double lng,
             @RequestParam("range") Double range)
     {
 
-        List<StationStatusDto> stationStatusDtoList= stationService.findStationsStatusByLoc(lat, lng, range);
+        FinalDto stationStatusDtoList= stationService.findStationsStatusByLoc(lat, lng, range);
         return ResponseEntity.ok(stationStatusDtoList);
     }
 
@@ -47,21 +48,26 @@ public class StationController {
             @ApiResponse(code = 400, message = "BAD REQUEST", response = ErrorResponse.class),
             @ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
     })
-    public ResponseEntity<List<StationStatusDto>>getStationDetails(
+    public ResponseEntity<FinalDto> getStationDetails(
             @PathVariable("sId") Long stationId
     ){
-        List<StationStatusDto> stationStatusDto = stationService.findById(stationId);
+        FinalDto stationStatusDto = stationService.findById(stationId);
         return ResponseEntity.ok(stationStatusDto);
     }
 
     @ResponseBody
     @GetMapping("/nav/near")
     @ApiOperation(value = "목적지 주변 충전소 목록 조회", notes = "사용자의 목적지 기준 2km 안에 있는 충전소 중 최적의 충전소를 조회한다.")
-    public ResponseEntity<List<StationStatusDistDto>>getNearStations(
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = StationStatusDto.class),
+            @ApiResponse(code = 400, message = "BAD REQUEST", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
+    })
+    public ResponseEntity<FinalDto>getNearStations(
             @RequestParam("lat") Double lat,
             @RequestParam("lng") Double lng
     ){
-        List<StationStatusDistDto> stationStatusDtoList = stationService.findNearStations(lat,lng);
+        FinalDto stationStatusDtoList = stationService.findNearStations(lat,lng);
 
         return ResponseEntity.ok(stationStatusDtoList);
     }
