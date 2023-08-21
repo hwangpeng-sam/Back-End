@@ -26,12 +26,6 @@ public class Status {
     private Integer Occupancy_60;
 
     @Column
-    private Integer Occupancy_80;
-
-    @Column
-    private Integer Occupancy_100;
-
-    @Column
     private Integer Occupancy_120;
 
 

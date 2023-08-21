@@ -1,8 +1,10 @@
 package com.example.plugissue.station.service;
 
+import com.example.plugissue.common.CalculateDistance;
 import com.example.plugissue.exception.notfound.NearStationsNotFoundException;
 import com.example.plugissue.exception.notfound.StationNotFoundException;
 import com.example.plugissue.exception.notfound.StationsNotFoundException;
+import com.example.plugissue.station.controller.dto.StationStatusDistDto;
 import com.example.plugissue.station.controller.dto.StationStatusDto;
 import com.example.plugissue.station.entity.Station;
 import com.example.plugissue.station.repository.StationRepository;
@@ -14,7 +16,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -50,6 +54,11 @@ public class StationService {
 
     }
 
+    /**
+     *
+     * @param stationId 상세 정보를 원하는 충전소의 id
+     * @return 해당 충전소의 상세 정보
+     */
     public List<StationStatusDto> findById(Long stationId) {
 //        StationStatusDto dto = stationRepository.findStationById(stationId);
 //
@@ -78,19 +87,42 @@ public class StationService {
 //        return stationRepository.findById(stationId).orElseThrow();
 //    }
     }
-    public List<StationStatusDto> findNearStations(Double lat, Double lng) {
+
+    /**
+     *
+     * @param lat 목적지 위도
+     * @param lng 목적지 경도
+     * @return 목적지 주변 2km 내의 충전소 중 거리가 가장 가까운 충전소 3개(거리가 같을 경우 비어있을 확률이 더 높은걸 return)
+     */
+    public List<StationStatusDistDto> findNearStations(Double lat, Double lng) {
         List<Object[]> queryResult = stationRepository.findStationsNearby(lat, lng);
-        if(queryResult.isEmpty()){
+        if(queryResult.size()==1){
             throw new NearStationsNotFoundException();
         }
         else{
-            List<StationStatusDto> dtos = new ArrayList<>();
+
+            List<StationStatusDistDto> dtos = new ArrayList<>();
 
             for (Object[] objects : queryResult) {
                 Station station = (Station) objects[0];
                 Status status = (Status) objects[1];
-                dtos.add(new StationStatusDto(station, status));
+                double distance = CalculateDistance.calculateDistance(((Station) objects[0]).getLatitude(),((Station) objects[0]).getLongitude(),lat,lng);
+                dtos.add(new StationStatusDistDto(station, status, distance));
             }
+
+            List<StationStatusDistDto> sortedList = dtos.stream() // 점유 확률로 먼저 sort 하고
+                    .sorted(Comparator.comparingInt(dto-> -dto.getStatus().getOccupancy_40()))
+                    .collect(Collectors.toList());
+
+            List<StationStatusDistDto> finalList = sortedList.stream() // 최종적으로 거리 기준으로 sort
+                    .sorted(Comparator.comparingDouble(dto->dto.getDistance()))
+                    .collect(Collectors.toList());
+
+            if (finalList.size() < 4)
+                dtos = finalList.subList(1,finalList.size());
+            else
+                dtos = finalList.subList(1,4);
+
             return dtos;
         }
 

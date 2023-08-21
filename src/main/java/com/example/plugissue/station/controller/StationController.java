@@ -1,6 +1,7 @@
 package com.example.plugissue.station.controller;
 
 import com.example.plugissue.exceptionhandler.ErrorResponse;
+import com.example.plugissue.station.controller.dto.StationStatusDistDto;
 import com.example.plugissue.station.controller.dto.StationStatusDto;
 import com.example.plugissue.station.service.StationService;
 import io.swagger.annotations.Api;
@@ -56,11 +57,12 @@ public class StationController {
     @ResponseBody
     @GetMapping("/nav/near")
     @ApiOperation(value = "목적지 주변 충전소 목록 조회", notes = "사용자의 목적지 기준 2km 안에 있는 충전소 중 최적의 충전소를 조회한다.")
-    public ResponseEntity<List<StationStatusDto>>getNearStations(
+    public ResponseEntity<List<StationStatusDistDto>>getNearStations(
             @RequestParam("lat") Double lat,
             @RequestParam("lng") Double lng
     ){
-        List<StationStatusDto> stationStatusDtoList = stationService.findNearStations(lat,lng);
+        List<StationStatusDistDto> stationStatusDtoList = stationService.findNearStations(lat,lng);
+
         return ResponseEntity.ok(stationStatusDtoList);
     }
 }
