@@ -4,14 +4,15 @@ import com.example.plugissue.common.CalculateDistance;
 import com.example.plugissue.exception.notfound.NearStationsNotFoundException;
 import com.example.plugissue.exception.notfound.StationNotFoundException;
 import com.example.plugissue.exception.notfound.StationsNotFoundException;
+import com.example.plugissue.station.controller.dto.FinalDto;
 import com.example.plugissue.station.controller.dto.StationStatusDistDto;
 import com.example.plugissue.station.controller.dto.StationStatusDto;
 import com.example.plugissue.station.entity.Station;
 import com.example.plugissue.station.repository.StationRepository;
 import com.example.plugissue.status.entity.Status;
-import com.example.plugissue.status.repository.StatusRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.type.TrueFalseType;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -35,7 +36,7 @@ public class StationService {
      * @param range 검색 범위
      * @return 충전소 목록 리스트
      */
-    public List<StationStatusDto> findStationsStatusByLoc(Double lat, Double lng, Double range) {
+    public FinalDto findStationsStatusByLoc(Double lat, Double lng, Double range) {
         List<Object[]> queryResult = stationRepository.findStationsByLoc(lat, lng, range);
         List<StationStatusDto> stationStatusDtoList = new ArrayList<>();
 
@@ -49,7 +50,8 @@ public class StationService {
                 stationStatusDtoList.add(new StationStatusDto(station, status));
             }
 
-            return stationStatusDtoList;
+            return new FinalDto(200,"현재 위치 기준 주변 충전소 조회 성공",stationStatusDtoList);
+//            return stationStatusDtoList;
         }
 
     }
@@ -59,7 +61,7 @@ public class StationService {
      * @param stationId 상세 정보를 원하는 충전소의 id
      * @return 해당 충전소의 상세 정보
      */
-    public List<StationStatusDto> findById(Long stationId) {
+    public FinalDto findById(Long stationId) {
 //        StationStatusDto dto = stationRepository.findStationById(stationId);
 //
 //        return dto;
@@ -75,7 +77,8 @@ public class StationService {
                 Status status = (Status) objects[1];
                 dtos.add(new StationStatusDto(station, status));
             }
-            return dtos;
+            return new FinalDto(200,"id 에 해당하는 충전소 정보 조회 성공", dtos);
+//            return dtos;
         }
 
 //        Station station = (Station) queryResult[0];
@@ -94,7 +97,7 @@ public class StationService {
      * @param lng 목적지 경도
      * @return 목적지 주변 2km 내의 충전소 중 거리가 가장 가까운 충전소 3개(거리가 같을 경우 비어있을 확률이 더 높은걸 return)
      */
-    public List<StationStatusDistDto> findNearStations(Double lat, Double lng) {
+    public FinalDto findNearStations(Double lat, Double lng) {
         List<Object[]> queryResult = stationRepository.findStationsNearby(lat, lng);
         if(queryResult.size()==1){
             throw new NearStationsNotFoundException();
@@ -118,12 +121,14 @@ public class StationService {
                     .sorted(Comparator.comparingDouble(dto->dto.getDistance()))
                     .collect(Collectors.toList());
 
-            if (finalList.size() < 4)
+            if (finalList.size() < 4) // 충전소 총 개수가 3개가 안 될 경우
                 dtos = finalList.subList(1,finalList.size());
             else
                 dtos = finalList.subList(1,4);
 
-            return dtos;
+
+            return new FinalDto(200,"목적지 주변 최적 충전소 조회 성공",dtos);
+//            return dtos;
         }
 
     }
