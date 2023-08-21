@@ -1,10 +1,11 @@
 package com.example.plugissue.user.repository;
 
 import com.example.plugissue.user.domain.User;
+import org.springframework.data.repository.CrudRepository;
 
-import java.util.Optional;
 import java.util.List;
-public interface UserRepository {
+import java.util.Optional;
+public interface UserRepository extends CrudRepository<User, String> {
     // 인터페이스란 기능에 대한 명세 집합
     // 공통적인 함수들을 정의하고 실질적인 repository에 상속 받는다
 

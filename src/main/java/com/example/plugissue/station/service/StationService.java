@@ -4,7 +4,6 @@ import com.example.plugissue.station.controller.dto.StationStatusDto;
 import com.example.plugissue.station.entity.Station;
 import com.example.plugissue.station.repository.StationRepository;
 import com.example.plugissue.status.entity.Status;
-import com.example.plugissue.status.repository.StatusRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
