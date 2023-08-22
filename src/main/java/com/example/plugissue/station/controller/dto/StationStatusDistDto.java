@@ -2,21 +2,21 @@ package com.example.plugissue.station.controller.dto;
 
 import com.example.plugissue.station.entity.Station;
 import com.example.plugissue.status.entity.Status;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-public class StationStatusDto {
+public class StationStatusDistDto {
 
     private Station station;
     private Status status;
+    private double distance;
 
-
-    public StationStatusDto(){
+    public StationStatusDistDto(){
 
     }
-    public StationStatusDto(Station station, Status status){
+    public StationStatusDistDto(Station station, Status status, double distance){
         this.station = station;
         this.status = status;
+        this.distance = distance;
     }
 }
