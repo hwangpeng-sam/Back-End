@@ -1,9 +1,10 @@
 package com.example.plugissue.status.entity;
 
-import com.example.plugissue.station.entity.Station;
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity(name = "occupancy")
 @Getter
@@ -14,7 +15,7 @@ public class Status {
 
     @Id
     @Column(name = "Sid", nullable = false)
-    private Long id;
+    private Long sid;
 
     @Column
     private Integer Occupancy_20;
