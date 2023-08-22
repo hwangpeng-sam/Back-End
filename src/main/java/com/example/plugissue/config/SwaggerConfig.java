@@ -1,5 +1,6 @@
 package com.example.plugissue.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -43,21 +44,5 @@ public class SwaggerConfig {
                 .version(API_VERSION)
                 .description(API_DESCRIPTION)
                 .build();
-    }
-    private SecurityContext securityContext() {
-        return SecurityContext.builder()
-                .securityReferences(defaultAuth())
-                .build();
-    }
-
-    private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("Authorization", authorizationScopes));
-    }
-
-    private ApiKey apiKey() {
-        return new ApiKey("Authorization", "Authorization", "header");
     }
 }
