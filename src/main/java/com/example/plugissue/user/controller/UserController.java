@@ -15,14 +15,14 @@ public class UserController {
 
     @Autowired
     private UserDao userDao;
-    @GetMapping("/user/get-all")
+    @GetMapping("/user/get-all") // 회원가입
     public List<User> getAllUsers() {
         return userDao.getAllUsers();
 
     }
 
     // android에서 새로운 정보를 받을 때
-    @PostMapping("/user/repository")
+    @PostMapping("/user/repository") //
     public User save(@RequestBody User user) {
         return userDao.save(user);
     }
