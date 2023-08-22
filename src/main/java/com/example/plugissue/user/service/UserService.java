@@ -18,7 +18,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
     // 회원가입
-    public String join(User user){
+    public Long join(User user){
         // 같은 이름이 있는 중복 회원 X
         validateOverapUser(user);
         userRepository.save(user);

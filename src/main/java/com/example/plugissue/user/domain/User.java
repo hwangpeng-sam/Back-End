@@ -1,67 +1,42 @@
 package com.example.plugissue.user.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "User_id")
-    private String id;
+    private Long userid;
+
+    @Column(nullable = false, length = 30, unique = true)
+    private String email;
     private String password;
+    @Column(nullable = false, length = 20)
     private String name;
+    @Column(nullable = false, unique = true, length = 20)
+    private String nickname;
     private int age;
 
-    public String getId() {
-        return this.id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
+    @OneToMany(mappedBy = "user")
+    private List<User> roles = new ArrayList<>();
+    public User(String email, String password, String username, String nickname) {
+        this.email = email;
         this.password = password;
+        this.name = username;
+        this.nickname = nickname;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                '}';
-
-    }
 }

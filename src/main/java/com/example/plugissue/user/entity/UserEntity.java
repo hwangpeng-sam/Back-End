@@ -1,4 +1,12 @@
 package com.example.plugissue.user.entity;
 
-public class UserEntity {
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.EntityListeners;
+
+
+@EntityListeners(AuditingEntityListener.class)
+public abstract class UserEntity {
+
 }
+

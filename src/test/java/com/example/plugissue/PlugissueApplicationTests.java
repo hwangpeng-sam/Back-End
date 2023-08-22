@@ -18,17 +18,17 @@ class PlugissueApplicationTests { // data 잘 들어가나 test 할 수 있음.
 	@Test
 	void contextLoads() {
 	}
-
-	@Test
-	void addUserRTest() {
-		User user= new User();
-		user.setId("cdh5306");
-		user.setPassword("1234");
-		user.setName("장찬희");
-		user.setAge(1);
-
-		userDao.save(user);
-	}
+//
+//	@Test
+//	void addUserRTest() {
+//		User user= new User();
+//		user.setUserid();
+//		user.setPassword("1234");
+//		user.setName("장찬희");
+//		user.setAge(1);
+//
+//		userDao.save(user);
+//	}
 	//@Test
 	void grtAllUsersAndDeleteThem(){
 		List<User> users = userDao.getAllUsers(); //받아온 걸 user에 저장해서
