@@ -15,7 +15,7 @@ public class Status {
 
     @Id
     @Column(name = "Sid", nullable = false)
-    private Long sid;
+    private Long id;
 
     @Column
     private Integer Occupancy_20;
