@@ -2,8 +2,6 @@ package com.example.plugissue.config;
 
 //import com.example.plugissue.user.repository.JdbcUserRepository;
 
-//import com.example.plugissue.user.repository.MemoryUserRepository;
-
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
