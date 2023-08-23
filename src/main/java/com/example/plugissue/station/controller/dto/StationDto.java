@@ -18,6 +18,8 @@ public class StationDto {
 
     private String address;
 
+    private Integer charger;
+
 
     public StationDto (Station station){
         this.sId = station.getSId();
@@ -25,5 +27,6 @@ public class StationDto {
         this.lat = station.getLatitude();
         this.name = station.getName();
         this.address = station.getAddress();
+        this.charger = station.getFast() + station.getSlow();
     }
 }

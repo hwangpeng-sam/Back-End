@@ -12,7 +12,6 @@ import com.example.plugissue.station.repository.StationRepository;
 import com.example.plugissue.status.entity.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.type.TrueFalseType;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -31,8 +30,8 @@ public class StationService {
 
     /**
      * 사용자의 현재 위치 기준으로 range 내에 있는 충전소 목록 조회
-     * @param lat 사용자의 현재 위치 중 위도
-     * @param lng 사용자의 현재 위치 중 경도
+     * @param lat 사용자의 현재 위치 위도
+     * @param lng 사용자의 현재 위치 경도
      * @return 충전소 목록 리스트
      */
     public FinalDto findStationsStatusByLoc(Double lat, Double lng) {
@@ -94,11 +93,11 @@ public class StationService {
      *
      * @param lat 목적지 위도
      * @param lng 목적지 경도
-     * @return 목적지 주변 3km 내의 충전소 중 거리가 가장 가까운 충전소 3개(거리가 같을 경우 비어있을 확률이 더 높은걸 return)
+     * @return 충전소 목록
      */
     public FinalDto findNearStations(Double lat, Double lng) {
         List<Object[]> queryResult = stationRepository.findStationsNearby(lat, lng);
-        if(queryResult.size()==1){
+        if(queryResult.size()<=1){
             throw new NearStationsNotFoundException();
         }
         else{
@@ -116,14 +115,14 @@ public class StationService {
 //                    .sorted(Comparator.comparingInt(dto-> -dto.getStatus().getOccupancy_40()))
 //                    .collect(Collectors.toList());
 //
-//            List<StationStatusDistDto> finalList = sortedList.stream() // 최종적으로 거리 기준으로 sort
-//                    .sorted(Comparator.comparingDouble(dto->dto.getDistance()))
-//                    .collect(Collectors.toList());
+            List<StationStatusDistDto> finalList = dtos.stream() // 거리기준 sort
+                    .sorted(Comparator.comparingDouble(dto->dto.getDistance()))
+                    .collect(Collectors.toList());
 //
-//            if (finalList.size() < 4) // 충전소 총 개수가 3개가 안 될 경우
-//                dtos = finalList.subList(1,finalList.size());
-//            else
-//                dtos = finalList.subList(1,4);
+            if (finalList.size() < 4) // 충전소 총 개수가 3개가 안 될 경우
+                dtos = finalList.subList(1,finalList.size());
+            else
+                dtos = finalList.subList(1,4);
 
 
             return new FinalDto(200,"목적지 주변 최적 충전소 조회 성공",dtos);
