@@ -18,8 +18,8 @@ public interface StationRepository extends JpaRepository<Station,Long> {
             "cos(radians(:lat)) * cos(radians(s.latitude)) * " +
             "cos(radians(s.longitude) - radians(:lng)) + " +
             "sin(radians(:lat)) * sin(radians(s.latitude))" +
-            ") <= :range")
-    List<Object[]> findStationsByLoc(@Param("lat") Double lat, @Param("lng") Double lng, @Param("range") Double range);
+            ") <= 3")
+    List<Object[]> findStationsByLoc(@Param("lat") Double lat, @Param("lng") Double lng);
 
     @Query("SELECT s,oc FROM Station s " +
             "LEFT JOIN occupancy " +
@@ -35,6 +35,6 @@ public interface StationRepository extends JpaRepository<Station,Long> {
             "cos(radians(:lat)) * cos(radians(s.latitude)) * " +
             "cos(radians(s.longitude) - radians(:lng)) + " +
             "sin(radians(:lat)) * sin(radians(s.latitude))" +
-            ") <= 2 ")
+            ") <= 3 ")
     List<Object[]> findStationsNearby(@Param("lat") Double lat, @Param("lng") Double lng); // 범위 2km 로 고정
 }

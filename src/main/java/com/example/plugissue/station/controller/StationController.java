@@ -31,11 +31,10 @@ public class StationController {
     })
     public ResponseEntity<FinalDto> getStationList(
             @RequestParam("lat")Double lat,
-            @RequestParam("lng")Double lng,
-            @RequestParam("range") Double range)
+            @RequestParam("lng")Double lng)
     {
 
-        FinalDto stationStatusDtoList= stationService.findStationsStatusByLoc(lat, lng, range);
+        FinalDto stationStatusDtoList= stationService.findStationsStatusByLoc(lat, lng);
         return ResponseEntity.ok(stationStatusDtoList);
     }
 
