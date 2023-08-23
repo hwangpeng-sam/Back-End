@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.criteria.CriteriaBuilder;
 
 @Entity(name = "occupancy")
 @Getter
@@ -17,8 +18,11 @@ public class Status {
     @Column(name = "Sid", nullable = false)
     private Long id;
 
+//    @Column
+//    private Integer now; // 현재상태 라벨링 컬럼
+
     @Column
-    private Integer Occupancy_20;
+    private Integer Occupancy_20; // 0,1,2 로 구분
 
     @Column
     private Integer Occupancy_40;

@@ -29,4 +29,10 @@ public class Station {
     @Column(nullable = false, length = 200)
     private String address;
 
+    @Column
+    private Integer slow;
+
+    @Column
+    private Integer fast;
+
 }
