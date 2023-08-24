@@ -18,20 +18,44 @@ public class Status {
     @Column(name = "Sid", nullable = false)
     private Long id;
 
-//    @Column
-//    private Integer now; // 현재상태 라벨링 컬럼
+    @Column
+    private Integer Occupancy0; // 현재상태 라벨링 컬럼
 
     @Column
-    private Integer Occupancy_20; // 0,1,2 로 구분
+    private Double Occupancy20_0; // 0,1,2 로 구분
 
     @Column
-    private Integer Occupancy_40;
+    private Double Occupancy20_1;
 
     @Column
-    private Integer Occupancy_60;
+    private Double Occupancy20_2;
 
     @Column
-    private Integer Occupancy_120;
+    private Double Occupancy40_0;
+
+    @Column
+    private Double Occupancy40_1;
+
+    @Column
+    private Double Occupancy40_2;
+
+    @Column
+    private Double Occupancy60_0;
+
+    @Column
+    private Double Occupancy60_1;
+
+    @Column
+    private Double Occupancy60_2;
+
+    @Column
+    private Double Occupancy120_0;
+
+    @Column
+    private Double Occupancy120_1;
+
+    @Column
+    private Double Occupancy120_2;
 
 
 //    @Builder
