@@ -7,6 +7,7 @@ import com.example.plugissue.exception.notfound.StationsNotFoundException;
 import com.example.plugissue.station.controller.dto.FinalDto;
 import com.example.plugissue.station.controller.dto.StationStatusDistDto;
 import com.example.plugissue.station.controller.dto.StationStatusDto;
+import com.example.plugissue.station.controller.dto.StationStatusLabelDistDto;
 import com.example.plugissue.station.entity.Station;
 import com.example.plugissue.station.repository.StationRepository;
 import com.example.plugissue.status.entity.Status;
@@ -36,7 +37,7 @@ public class StationService {
      */
     public FinalDto findStationsStatusByLoc(Double lat, Double lng) {
         List<Object[]> queryResult = stationRepository.findStationsByLoc(lat, lng);
-        List<StationStatusDto> stationStatusDtoList = new ArrayList<>();
+        List<StationStatusLabelDistDto> dtos = new ArrayList<>();
 
         if (queryResult.isEmpty()){
             throw new StationsNotFoundException();
@@ -45,10 +46,11 @@ public class StationService {
             for (Object[] objects : queryResult) {
                 Station station = (Station) objects[0];
                 Status status = (Status) objects[1];
-                stationStatusDtoList.add(new StationStatusDto(station, status));
+                double distance = CalculateDistance.calculateDistance(((Station) objects[0]).getLatitude(),((Station) objects[0]).getLongitude(),lat,lng);
+                dtos.add(new StationStatusLabelDistDto(station, status, distance));
             }
 
-            return new FinalDto(200,"현재 위치 기준 주변 충전소 조회 성공",stationStatusDtoList);
+            return new FinalDto(200,"현재 위치 기준 주변 충전소 조회 성공",dtos);
 //            return stationStatusDtoList;
         }
 
@@ -119,10 +121,10 @@ public class StationService {
                     .sorted(Comparator.comparingDouble(dto->dto.getDistance()))
                     .collect(Collectors.toList());
 //
-            if (finalList.size() < 4) // 충전소 총 개수가 3개가 안 될 경우
-                dtos = finalList.subList(1,finalList.size());
-            else
-                dtos = finalList.subList(1,4);
+//            if (finalList.size() < 4) // 충전소 총 개수가 3개가 안 될 경우
+//                dtos = finalList.subList(1,finalList.size());
+//            else
+//                dtos = finalList.subList(1,4);
 
 
             return new FinalDto(200,"목적지 주변 최적 충전소 조회 성공",dtos);
