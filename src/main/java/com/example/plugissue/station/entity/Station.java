@@ -15,7 +15,7 @@ public class Station {
 
     @Id
     @Column(name = "Sid",nullable = false)
-    private Long sId;
+    private Integer sId;
 
     @Column(nullable = false)
     private Double longitude;

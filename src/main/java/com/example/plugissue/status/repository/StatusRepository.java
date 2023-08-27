@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface StatusRepository extends JpaRepository<Status,Long> {
 
-    @Query("SELECT oc FROM occupancy oc WHERE oc.id IN (:stationIdsInRange)")
+    @Query("select u from Usages u ")
     List<Status> findStatusByStationIds(@Param("stationIdsInRange") List<Long> stationIdsInRange);
 }
