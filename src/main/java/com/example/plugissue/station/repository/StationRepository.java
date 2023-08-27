@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public interface StationRepository extends JpaRepository<Station,Long> {
@@ -25,7 +26,7 @@ public interface StationRepository extends JpaRepository<Station,Long> {
             "LEFT JOIN occupancy " +
             "oc ON s.sId = oc.id " +
             "WHERE s.sId = :stationId")
-    List<Object[]> findStationById(@Param("stationId") Long stationId);
+    List<Object[]> findStationById(@Param("stationId") Integer stationId);
 
 
     @Query("SELECT s, oc FROM Station s " +

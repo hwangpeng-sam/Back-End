@@ -11,9 +11,11 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @Api(tags = "Station Api")
 @Slf4j
@@ -46,9 +48,10 @@ public class StationController {
             @ApiResponse(code = 500, message = "NOT FOUND", response = ErrorResponse.class)
     })
     public ResponseEntity<FinalDto> getStationDetails(
-            @PathVariable("sId") Long stationId
+            @PathVariable("sId") Integer stationId,
+            @RequestParam("time") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime time
     ){
-        FinalDto stationStatusDto = stationService.findById(stationId);
+        FinalDto stationStatusDto = stationService.findById(stationId, time);
         return ResponseEntity.ok(stationStatusDto);
     }
 

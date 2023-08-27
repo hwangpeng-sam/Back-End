@@ -8,7 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class StationDto {
 
-    private Long sId;
+    private Integer sId;
 
     private Double lng;
 
