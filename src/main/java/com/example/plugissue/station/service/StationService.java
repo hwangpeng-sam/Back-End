@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -74,7 +76,12 @@ public class StationService {
         // 거기서 이제 시간을 20으로 나눠서 몫 * 20 분 기준으로 +20분40분60분120분 구해서 저장
         String statId = "Sid_" + stationId;
         Period subtractPer = Period.ofYears(1).plusMonths(6);
-        LocalDateTime subtractTime = time.minus(subtractPer); // 1년 6개월 뺀거
+        LocalDate subtractDate = time.toLocalDate().minus(subtractPer); // 1년 6개월 뺀거
+        LocalTime adSec = time.toLocalTime().withSecond(0);
+        LocalDateTime subtractTime = subtractDate.atTime(adSec);
+
+        subtractTime = subtractTime.minusMinutes(subtractTime.getMinute()).plusMinutes(20 * (subtractTime.getMinute() / 20));
+//        subtractTime = subtractTime.minusSeconds(subtractTime.getSecond());
 
         LocalDateTime subtract4Week = subtractTime.minusWeeks(4); // 4주 더 뺀 날짜 -> 4주전
         LocalDateTime subtract3Week = subtractTime.minusWeeks(3); // 3주 더 뺀 날짜 -> 3주전
@@ -85,6 +92,7 @@ public class StationService {
         List<LocalDateTime> calc3Week = calcMin(subtract3Week);
         List<LocalDateTime> calc2Week = calcMin(subtract2Week);
         List<LocalDateTime> calc1Week = calcMin(subtract1Week);
+
 
         LocalDateTime before4Hours = subtractTime.minusHours(4);
         LocalDateTime before3Hours = subtractTime.minusHours(3);
@@ -100,6 +108,7 @@ public class StationService {
         List<Object[]> resHours = new ArrayList<>();
 
         resHours = getList(listHours,resHours);
+
         List<Integer> chargers4 = new ArrayList<>();
         chargers4 = getChargers4(resHours,chargers4,statId);
 
@@ -209,10 +218,12 @@ public class StationService {
 
         Integer min = time.getMinute();
         LocalDateTime setTime = time.minusMinutes(min).plusMinutes(20 * (min / 20)); // 시간을 0으로 만들고 시간 / 20 의 몫에 20을 곱해서 더해줌
-        LocalDateTime time20 = setTime.plusMinutes(20);
-        LocalDateTime time40 = setTime.plusMinutes(40);
-        LocalDateTime time60 = setTime.plusMinutes(60);
-        LocalDateTime time120 = setTime.plusMinutes(120);
+//        setTime = setTime.minusSeconds(setTime.getSecond());
+
+        LocalDateTime time20 = time.plusMinutes(20);
+        LocalDateTime time40 = time.plusMinutes(40);
+        LocalDateTime time60 = time.plusMinutes(60);
+        LocalDateTime time120 = time.plusMinutes(120);
 
         list.add(time20);
         list.add(time40);
@@ -222,7 +233,9 @@ public class StationService {
         return list;
     }
 
-    // 각 주마다 시간에 따른 sid에 해당하는 점유 대수 배열 구하기
+
+
+    // 각 주마다 시간에 따른 각 sid에 해당하는 점유 대수 배열 구하기
     private List<Object[]> getList(List<LocalDateTime> calcTime, List<Object[]> res){
         for (LocalDateTime calc : calcTime) {
             String cal = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(calc);
