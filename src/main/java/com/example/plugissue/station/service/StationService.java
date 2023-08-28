@@ -10,10 +10,8 @@ import com.example.plugissue.station.repository.StationRepository;
 import com.example.plugissue.status.entity.Status;
 import com.example.plugissue.usages.entity.Usages;
 import com.example.plugissue.usages.repository.UsagesRepository;
-import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -68,34 +66,54 @@ public class StationService {
     /**
      *
      * @param stationId 상세 정보를 원하는 충전소의 id
+     * @param time 현재 시간 타임스탬프
      * @return 해당 충전소의 상세 정보
      */
     public FinalDto findById(Integer stationId,LocalDateTime time) {
         // time 을 1년6개월 빼고 4주를 더 빼
         // 거기서 이제 시간을 20으로 나눠서 몫 * 20 분 기준으로 +20분40분60분120분 구해서 저장
+        String statId = "Sid_" + stationId;
         Period subtractPer = Period.ofYears(1).plusMonths(6);
         LocalDateTime subtractTime = time.minus(subtractPer); // 1년 6개월 뺀거
 
         LocalDateTime subtract4Week = subtractTime.minusWeeks(4); // 4주 더 뺀 날짜 -> 4주전
         LocalDateTime subtract3Week = subtractTime.minusWeeks(3); // 3주 더 뺀 날짜 -> 3주전
-
         LocalDateTime subtract2Week = subtractTime.minusWeeks(2); // 2주 더 뺀 날짜 -> 2주전
-
         LocalDateTime subtract1Week = subtractTime.minusWeeks(1); // 1주 더 뺀 날짜 -> 1주전
-
 
         List<LocalDateTime> calc4Week = calcMin(subtract4Week); // 4주전 해당 시간 20분,40분,60분,120분 뒤 시각
         List<LocalDateTime> calc3Week = calcMin(subtract3Week);
         List<LocalDateTime> calc2Week = calcMin(subtract2Week);
         List<LocalDateTime> calc1Week = calcMin(subtract1Week);
 
+        LocalDateTime before4Hours = subtractTime.minusHours(4);
+        LocalDateTime before3Hours = subtractTime.minusHours(3);
+        LocalDateTime before2Hours = subtractTime.minusHours(2);
+        LocalDateTime before1Hours = subtractTime.minusHours(1);
+
+        List<LocalDateTime> listHours = new ArrayList<>();
+        listHours.add(before4Hours);
+        listHours.add(before3Hours);
+        listHours.add(before2Hours);
+        listHours.add(before1Hours);
+
+        List<Object[]> resHours = new ArrayList<>();
+
+        resHours = getList(listHours,resHours);
+        List<Integer> chargers4 = new ArrayList<>();
+        chargers4 = getChargers4(resHours,chargers4,statId);
+
+        Double charAvg4;
+
         //시간에 있는걸 다 가져와서 sId 에 해당하는걸 뽑아서 dto 에 넣기
         List<Object[]> queryResult = stationRepository.findStationById(stationId);
+
 //        Object[] res20 = usagesRepository.findByTime(time20);
 //        Object[] res40 = usagesRepository.findByTime(time40);
 //        Usages[] res60 = usagesRepository.findByTime(time60);
 //        Usages res120 = usagesRepository.findByTime(time120);
-        String statId = "Sid_" + stationId;
+
+
         List<Object[]> res4 = new ArrayList<>();
         List<Object[]> res3 = new ArrayList<>();
         List<Object[]> res2 = new ArrayList<>();
@@ -112,9 +130,6 @@ public class StationService {
         List<Integer> chargers120 = new ArrayList<>();
 
         chargers20 = getChargers20(res4,res3,res2,res1,chargers20,statId);
-//        for (Integer num : chargers20){
-//            System.out.println(num);
-//        }
         chargers40 = getChargers40(res4,res3,res2,res1,chargers40,statId);
         chargers60 = getChargers60(res4,res3,res2,res1,chargers60,statId);
         chargers120 = getChargers120(res4,res3,res2,res1,chargers120,statId);
@@ -123,24 +138,6 @@ public class StationService {
         Double charAvg40;
         Double charAvg60;
         Double charAvg120;
-
-        charAvg20 = calcAvg(chargers20);
-        charAvg40 = calcAvg(chargers40);
-        charAvg60 = calcAvg(chargers60);
-        charAvg120 = calcAvg(chargers120);
-//        System.out.println("subtract4Week = " + subtract4Week);
-//        System.out.println("subtract3Week = " + subtract3Week);
-//        System.out.println("subtract2Week = " + subtract2Week);
-//        System.out.println("subtract1Week = " + subtract1Week);
-
-
-//        Object usage = res1.get(0)[0];
-//        if (usage instanceof Usages){
-//            Usages usages = (Usages) usage;
-//            System.out.println(usages.getTime());
-//        }
-
-
 
         if(queryResult.isEmpty()){
             throw new StationNotFoundException();
@@ -155,20 +152,11 @@ public class StationService {
                 charAvg40 = calcAvg(chargers40);
                 charAvg60 = calcAvg(chargers60);
                 charAvg120 = calcAvg(chargers120);
-                dtos.add(new StationStatusAvgDto(station, status,charAvg20,charAvg40,charAvg60,charAvg120));
+                charAvg4 = calcAvg(chargers4);
+                dtos.add(new StationStatusAvgDto(station, status,charAvg20,charAvg40,charAvg60,charAvg120,charAvg4));
             }
             return new FinalDto(200,"id 에 해당하는 충전소 정보 조회 성공", dtos);
-//            return dtos;
         }
-
-//        Station station = (Station) queryResult[0];
-//        Status status = (Status) queryResult[1];
-//
-//        StationStatusDto stationStatusDto = new StationStatusDto(station,status);
-//
-//        return stationStatusDto;
-//        return stationRepository.findById(stationId).orElseThrow();
-//    }
     }
 
     /**
@@ -244,6 +232,7 @@ public class StationService {
         return res;
     }
 
+    // 20분 뒤 점유 상태 조회
     private List<Integer> getChargers20(List<Object[]> li1,List<Object[]> li2,List<Object[]> li3,List<Object[]> li4,
                                       List<Integer> chargers, String id)  {
         Usages usage1 = (Usages) li1.get(0)[0];
@@ -259,6 +248,7 @@ public class StationService {
         return chargers;
     }
 
+    // 40분 뒤 점유 상태 조회
     private List<Integer> getChargers40(List<Object[]> li1,List<Object[]> li2,List<Object[]> li3,List<Object[]> li4,
                                        List<Integer> chargers, String id)  {
         Usages usage1 = (Usages) li1.get(1)[0];
@@ -274,6 +264,7 @@ public class StationService {
         return chargers;
     }
 
+    // 60분 뒤 점유 상태 조회
     private List<Integer> getChargers60(List<Object[]> li1,List<Object[]> li2,List<Object[]> li3,List<Object[]> li4,
                                        List<Integer> chargers, String id)  {
         Usages usage1 = (Usages) li1.get(2)[0];
@@ -289,6 +280,7 @@ public class StationService {
         return chargers;
     }
 
+    // 120분 뒤 점유 상태 조회
     private List<Integer> getChargers120(List<Object[]> li1,List<Object[]> li2,List<Object[]> li3,List<Object[]> li4,
                                        List<Integer> chargers, String id)  {
         Usages usage1 = (Usages) li1.get(3)[0];
@@ -300,6 +292,13 @@ public class StationService {
         chargers.add(getId(usage2,id));
         chargers.add(getId(usage3,id));
         chargers.add(getId(usage4,id));
+
+        return chargers;
+    }
+
+    private List<Integer> getChargers4(List<Object[]> li1, List<Integer> chargers, String id)  {
+        Usages usage1 = (Usages) li1.get(0)[0];
+        chargers.add(getId(usage1,id));
 
         return chargers;
     }
