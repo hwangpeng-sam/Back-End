@@ -11,6 +11,7 @@ import java.util.List;
 public class StationStatusLabelDistDto {
 
     private Station station; // station 정보
+    private Integer Occupancy0;
     private Integer Occupancy20;
     private Integer Occupancy40;
     private Integer Occupancy60;
@@ -39,6 +40,7 @@ public class StationStatusLabelDistDto {
 
     public StationStatusLabelDistDto(Station station,Status status, Double distance){
         this.station = station;
+        this.Occupancy0 = status.getOccupancy0();
         this.Occupancy20 = getMaxIndex(List.of(status.getOccupancy20_0(),status.getOccupancy20_1(), status.getOccupancy20_2()));
         this.Occupancy40 = getMaxIndex(List.of(status.getOccupancy40_0(),status.getOccupancy40_1(), status.getOccupancy40_2()));
         this.Occupancy60 = getMaxIndex(List.of(status.getOccupancy60_0(),status.getOccupancy60_1(), status.getOccupancy60_2()));
