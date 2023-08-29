@@ -148,6 +148,8 @@ public class StationService {
         Double charAvg60;
         Double charAvg120;
 
+        System.out.println("subtractTime = " + subtractTime);
+
         if(queryResult.isEmpty()){
             throw new StationNotFoundException();
         }
